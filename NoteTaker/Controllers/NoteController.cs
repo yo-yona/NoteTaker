@@ -27,9 +27,9 @@ namespace NoteTaker.Controllers
         }
 
         // GET: NoteController/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(Note obj)
         {
-            return View();
+            return View(obj);
         }
 
         // GET: NoteController/Create
@@ -41,33 +41,22 @@ namespace NoteTaker.Controllers
         // POST: NoteController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> CreateAsync(Note obj)//, IFormCollection collection)
+        public async Task<ActionResult> Create(Note obj)//, IFormCollection collection)
         {
-            /*string id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            var note = new Note
-            {
-                Title = obj.Title,
-                Description = obj.Description,
-                Content = obj.Content,
-                DateCreated = DateTime.UtcNow,
-                LastModified = DateTime.UtcNow,
-                UserId = id
-            };
+                var note = new Note
+                {
+                    Title = obj.Title,
+                    Description = obj.Description,
+                    Content = obj.Content,
+                    DateCreated = DateTime.UtcNow,
+                    LastModified = DateTime.UtcNow,
+                    UserId = id
+                };
+                await _notesServices.CreateAsync(note);
 
-            await _notesServices.CreateAsync(note);
-            return RedirectToAction("Index");*/
-
-            if (ModelState.IsValid)
-            {
-                Console.WriteLine(obj.ToString());
-                Console.WriteLine(obj.ToString());
-                _db.Notes.Add(obj);
-                _db.SaveChanges();
-                TempData["success"] = "Note created successfully";
-                return RedirectToAction("Index");
-            }
-            return View(obj);
+            return RedirectToAction("Index");
         }
 
         // GET: NoteController/Edit/5
@@ -92,16 +81,17 @@ namespace NoteTaker.Controllers
         // POST: NoteController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Note obj)
+        public async Task<ActionResult> Edit(Note obj)
         {
-            if (ModelState.IsValid)
-            {
-                _db.Notes.Update(obj);
-                _db.SaveChanges();
-                TempData["success"] = "Note updated successfully";
-                return RedirectToAction("Index");
-            }
-            return View(obj);
+            var note = _notesServices.GetNoteById(obj.Id);
+
+            note.Title = obj.Title;
+            note.Description = obj.Description;
+            note.Content = obj.Content;
+
+            await _notesServices.UpdateAsync(note);
+
+            return RedirectToAction("Index");
         }
 
         // GET: NoteController/Delete/5
