@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NoteTaker.Models
 {
-    public class User : IdentityUser
+    public class ApplicationUser : IdentityUser
     {
         [MaxLength(50)]
         public string FirstName { get; set; }
