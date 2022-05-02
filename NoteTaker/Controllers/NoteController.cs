@@ -2,15 +2,22 @@
 using Microsoft.AspNetCore.Mvc;
 using NoteTaker.Models;
 using NoteTaker.Data;
+using System.Security.Claims;
+using NoteTaker.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace NoteTaker.Controllers
 {
     public class NoteController : Controller
     {
+
+        private readonly INotesServices _notesServices;
+
         private readonly ApplicationDbContext _db;
-        public NoteController(ApplicationDbContext db)
+        public NoteController(ApplicationDbContext db, INotesServices notesServices)
         {
             _db = db;
+            _notesServices = notesServices;
         }
         // GET: NoteController
         public ActionResult Index()
@@ -34,10 +41,27 @@ namespace NoteTaker.Controllers
         // POST: NoteController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Note obj)//, IFormCollection collection)
+        public async Task<ActionResult> CreateAsync(Note obj)//, IFormCollection collection)
         {
+            /*string id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var note = new Note
+            {
+                Title = obj.Title,
+                Description = obj.Description,
+                Content = obj.Content,
+                DateCreated = DateTime.UtcNow,
+                LastModified = DateTime.UtcNow,
+                UserId = id
+            };
+
+            await _notesServices.CreateAsync(note);
+            return RedirectToAction("Index");*/
+
             if (ModelState.IsValid)
             {
+                Console.WriteLine(obj.ToString());
+                Console.WriteLine(obj.ToString());
                 _db.Notes.Add(obj);
                 _db.SaveChanges();
                 TempData["success"] = "Note created successfully";
@@ -53,16 +77,16 @@ namespace NoteTaker.Controllers
             {
                 return NotFound();
             }
-            var categoryFromDb = _db.Notes.Find(id);
+            var noteFromDb = _db.Notes.Find(id);
             //var categoryFromDbFirst = _db.Categories.FirstOrDefault(u=>u.Id==id);
             //var categoryFromDbSingle = _db.Categories.SingleOrDefault(u => u.Id == id);
 
-            if (categoryFromDb == null)
+            if (noteFromDb == null)
             {
                 return NotFound();
             }
 
-            return View(categoryFromDb);
+            return View(noteFromDb);
         }
 
         // POST: NoteController/Edit/5
@@ -74,7 +98,7 @@ namespace NoteTaker.Controllers
             {
                 _db.Notes.Update(obj);
                 _db.SaveChanges();
-                TempData["success"] = "Category updated successfully";
+                TempData["success"] = "Note updated successfully";
                 return RedirectToAction("Index");
             }
             return View(obj);
@@ -89,16 +113,18 @@ namespace NoteTaker.Controllers
         // POST: NoteController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int? id, IFormCollection collection)
         {
-            try
+            var obj = _db.Notes.Find(id);
+            if (obj == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
-            {
-                return View();
-            }
+
+            _db.Notes.Remove(obj);
+            _db.SaveChanges();
+            TempData["success"] = "Note deleted successfully";
+            return RedirectToAction("Index");
         }
     }
 }

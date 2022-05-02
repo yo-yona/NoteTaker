@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using NoteTaker.Data;
 using NoteTaker.Models;
 using Microsoft.AspNetCore.Identity;
+using NoteTaker.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");;
@@ -23,6 +24,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+
+builder.Services.AddNotes();
 
 var app = builder.Build();
 //middleware
