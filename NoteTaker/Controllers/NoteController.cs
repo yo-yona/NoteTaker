@@ -43,20 +43,19 @@ namespace NoteTaker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(Note obj)//, IFormCollection collection)
         {
-            string id = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string id = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            obj.UserId = id;
+            obj.DateCreated = DateTime.UtcNow;
+            obj.LastModified = DateTime.UtcNow;
 
-                var note = new Note
-                {
-                    Title = obj.Title,
-                    Description = obj.Description,
-                    Content = obj.Content,
-                    DateCreated = DateTime.UtcNow,
-                    LastModified = DateTime.UtcNow,
-                    UserId = id
-                };
-                await _notesServices.CreateAsync(note);
+            if (ModelState.IsValid)
+            {
+                await _notesServices.CreateAsync(obj);
 
-            return RedirectToAction("Index");
+                return RedirectToAction("Index");
+            }
+            return View(obj);
+
         }
 
         // GET: NoteController/Edit/5
