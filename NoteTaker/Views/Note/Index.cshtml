@@ -4,7 +4,10 @@
 }
 <div class="row">
     <div class="notes w-100 d-flex flex-column justify-content-around">
-        <a asp-action="Create" class="btn btn-success btn-new-note">New Note</a>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a asp-action="Create" class="btn btn-success btn-new-note">New Note</a>
+        }
 
         <hr>
 
