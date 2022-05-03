@@ -51,6 +51,7 @@ namespace NoteTaker.Controllers
             if (ModelState.IsValid)
             {
                 await _notesServices.CreateAsync(obj);
+                TempData["success"] = "Note created successfully";
 
                 return RedirectToAction("Index");
             }
@@ -87,6 +88,7 @@ namespace NoteTaker.Controllers
             note.Title = obj.Title;
             note.Description = obj.Description;
             note.Content = obj.Content;
+            TempData["success"] = "Note edited successfully";
 
             await _notesServices.UpdateAsync(note);
 
