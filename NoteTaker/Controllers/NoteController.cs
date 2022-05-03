@@ -45,16 +45,16 @@ namespace NoteTaker.Controllers
         {
             string id = User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             obj.UserId = id;
-            obj.DateCreated = DateTime.UtcNow;
-            obj.LastModified = DateTime.UtcNow;
+            obj.DateCreated = DateTime.Now;
+            obj.LastModified = DateTime.Now;
 
-            if (ModelState.IsValid)
-            {
+           /* if (ModelState.IsValid)
+            {*/
                 await _notesServices.CreateAsync(obj);
                 TempData["success"] = "Note created successfully";
 
                 return RedirectToAction("Index");
-            }
+            //}
             return View(obj);
 
         }
