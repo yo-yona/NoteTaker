@@ -27,9 +27,22 @@ namespace NoteTaker.Controllers
         }
 
         // GET: NoteController/Details/5
-        public ActionResult Details(Note obj)
+        public ActionResult Details(int? id)
         {
-            return View(obj);
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var noteFromDb = _db.Notes.Find(id);
+            //var categoryFromDbFirst = _db.Categories.FirstOrDefault(u=>u.Id==id);
+            //var categoryFromDbSingle = _db.Categories.SingleOrDefault(u => u.Id == id);
+
+            if (noteFromDb == null)
+            {
+                return NotFound();
+            }
+
+            return View(noteFromDb);
         }
 
         // GET: NoteController/Create

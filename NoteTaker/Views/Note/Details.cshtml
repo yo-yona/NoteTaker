@@ -1,7 +1,7 @@
 ﻿@model NoteTaker.Models.Note
 
 <div>
-    <h4>Note</h4>
+    <h1>Note</h1>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -9,12 +9,6 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Content)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Content)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Description)
@@ -33,6 +27,12 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.LastModified)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Content)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Content)
         </dd>
     </dl>
 </div>
