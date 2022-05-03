@@ -1,1 +1,1 @@
-NoteTaker
+For public note display (the idea is that some members of a club can share their reviews of i.e. books or films).
