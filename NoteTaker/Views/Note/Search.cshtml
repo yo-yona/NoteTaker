@@ -1,0 +1,21 @@
+﻿@model IEnumerable<Note>
+@{
+    ViewData["Title"] = "Notes";
+}
+<div class="row">
+    <div class="notes w-100 d-flex flex-column justify-content-around">
+        <div class="d-flex justify-content-around flex-nowrap">
+            @if (Model==null)
+            {
+                <h1>Nothing found</h1>
+            }
+            else
+            {
+                foreach (var item in Model)
+                {
+                    @await Html.PartialAsync("_ViewNote.cshtml", item)
+                }
+            }
+        </div>
+    </div>
+</div>

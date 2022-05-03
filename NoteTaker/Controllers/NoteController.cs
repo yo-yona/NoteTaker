@@ -45,6 +45,15 @@ namespace NoteTaker.Controllers
             return View(noteFromDb);
         }
 
+        // GET: NoteController/Details/5
+        public ActionResult Search(string? searchLine)
+        {
+            IEnumerable<Note> notesFromDb = null;
+            if (searchLine != null) notesFromDb = _db.Notes.Where(note => note.Title.ToLower().Contains(searchLine.ToLower()) || note.Description.ToLower().Contains(searchLine.ToLower()) || note.Description.ToLower().Contains(searchLine.ToLower()));
+
+            return View(notesFromDb);
+        }
+
         // GET: NoteController/Create
         public ActionResult Create()
         {
